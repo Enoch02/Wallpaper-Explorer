@@ -14,6 +14,12 @@
 		791E70502C7A76B6006A4DA2 /* Wallpaper_ExplorerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E704F2C7A76B6006A4DA2 /* Wallpaper_ExplorerTests.swift */; };
 		791E705A2C7A76B6006A4DA2 /* Wallpaper_ExplorerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E70592C7A76B6006A4DA2 /* Wallpaper_ExplorerUITests.swift */; };
 		791E705C2C7A76B6006A4DA2 /* Wallpaper_ExplorerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E705B2C7A76B6006A4DA2 /* Wallpaper_ExplorerUITestsLaunchTests.swift */; };
+		791E706A2C7A7E6D006A4DA2 /* SortOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E70692C7A7E6D006A4DA2 /* SortOptions.swift */; };
+		791E706C2C7A8173006A4DA2 /* SortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E706B2C7A8173006A4DA2 /* SortOrder.swift */; };
+		791E70712C7A8592006A4DA2 /* WallpapersGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E70702C7A8592006A4DA2 /* WallpapersGrid.swift */; };
+		791E70772C7A88F0006A4DA2 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E70762C7A88F0006A4DA2 /* ApiService.swift */; };
+		79B133462C83113D00B5186E /* DefaultWallpaperSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B133452C83113D00B5186E /* DefaultWallpaperSearch.swift */; };
+		79B133482C83177E00B5186E /* WallpaperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B133472C83177E00B5186E /* WallpaperView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +51,12 @@
 		791E70552C7A76B6006A4DA2 /* Wallpaper ExplorerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Wallpaper ExplorerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		791E70592C7A76B6006A4DA2 /* Wallpaper_ExplorerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallpaper_ExplorerUITests.swift; sourceTree = "<group>"; };
 		791E705B2C7A76B6006A4DA2 /* Wallpaper_ExplorerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallpaper_ExplorerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		791E70692C7A7E6D006A4DA2 /* SortOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOptions.swift; sourceTree = "<group>"; };
+		791E706B2C7A8173006A4DA2 /* SortOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOrder.swift; sourceTree = "<group>"; };
+		791E70702C7A8592006A4DA2 /* WallpapersGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpapersGrid.swift; sourceTree = "<group>"; };
+		791E70762C7A88F0006A4DA2 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
+		79B133452C83113D00B5186E /* DefaultWallpaperSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultWallpaperSearch.swift; sourceTree = "<group>"; };
+		79B133472C83177E00B5186E /* WallpaperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +107,9 @@
 		791E703C2C7A76B4006A4DA2 /* Wallpaper Explorer */ = {
 			isa = PBXGroup;
 			children = (
+				791E70752C7A88D9006A4DA2 /* API */,
+				79901D0E2C7BB4DE0056BE05 /* Models */,
+				791E706F2C7A856A006A4DA2 /* UI */,
 				791E703D2C7A76B4006A4DA2 /* Wallpaper_ExplorerApp.swift */,
 				791E703F2C7A76B4006A4DA2 /* ContentView.swift */,
 				791E70412C7A76B5006A4DA2 /* Assets.xcassets */,
@@ -127,6 +142,41 @@
 				791E705B2C7A76B6006A4DA2 /* Wallpaper_ExplorerUITestsLaunchTests.swift */,
 			);
 			path = "Wallpaper ExplorerUITests";
+			sourceTree = "<group>";
+		};
+		791E706F2C7A856A006A4DA2 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				791E70702C7A8592006A4DA2 /* WallpapersGrid.swift */,
+				79B133472C83177E00B5186E /* WallpaperView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		791E70742C7A860A006A4DA2 /* ApiModels */ = {
+			isa = PBXGroup;
+			children = (
+				79B133452C83113D00B5186E /* DefaultWallpaperSearch.swift */,
+			);
+			path = ApiModels;
+			sourceTree = "<group>";
+		};
+		791E70752C7A88D9006A4DA2 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				791E70762C7A88F0006A4DA2 /* ApiService.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		79901D0E2C7BB4DE0056BE05 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				791E70742C7A860A006A4DA2 /* ApiModels */,
+				791E70692C7A7E6D006A4DA2 /* SortOptions.swift */,
+				791E706B2C7A8173006A4DA2 /* SortOrder.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,7 +309,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				791E70712C7A8592006A4DA2 /* WallpapersGrid.swift in Sources */,
+				79B133482C83177E00B5186E /* WallpaperView.swift in Sources */,
 				791E70402C7A76B4006A4DA2 /* ContentView.swift in Sources */,
+				79B133462C83113D00B5186E /* DefaultWallpaperSearch.swift in Sources */,
+				791E706A2C7A7E6D006A4DA2 /* SortOptions.swift in Sources */,
+				791E706C2C7A8173006A4DA2 /* SortOrder.swift in Sources */,
+				791E70772C7A88F0006A4DA2 /* ApiService.swift in Sources */,
 				791E703E2C7A76B4006A4DA2 /* Wallpaper_ExplorerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -421,18 +477,20 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Wallpaper Explorer/Wallpaper_Explorer.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Wallpaper Explorer/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.enoch02.Wallpaper-Explorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -446,18 +504,20 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Wallpaper Explorer/Wallpaper_Explorer.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Wallpaper Explorer/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.enoch02.Wallpaper-Explorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
