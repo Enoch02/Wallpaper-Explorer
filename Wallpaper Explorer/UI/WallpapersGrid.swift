@@ -12,6 +12,8 @@ struct WallpapersGrid: View {
     
     let gridItems = [
         GridItem(.adaptive(minimum: 400, maximum: .infinity)),
+        GridItem(.adaptive(minimum: 400, maximum: .infinity)),
+        GridItem(.adaptive(minimum: 400, maximum: .infinity)),
         GridItem(.adaptive(minimum: 400, maximum: .infinity))
     ]
     
@@ -24,6 +26,7 @@ struct WallpapersGrid: View {
                 )
             }
             )
+            .padding(10)
         }
     }
 }

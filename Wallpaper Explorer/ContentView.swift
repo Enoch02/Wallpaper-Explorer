@@ -45,11 +45,6 @@ struct ContentView: View {
             },
             detail: {
                 WallpapersGrid(wallpapers: $wallpapers)
-                /*List {
-                    ForEach(wallpapers, id: \.self.id) { wallpaper in
-                        Link("Wallpaper \(wallpaper.id) Url", destination: wallpaper.url)
-                    }
-                }*/
             }
         )
         .frame(minWidth: 1200, minHeight: 600)
