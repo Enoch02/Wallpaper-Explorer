@@ -9,8 +9,15 @@ import SwiftUI
 
 struct WallpaperView: View {
     let wallpaper: Wallpaper
+    
     @State private var imageUrl: URL
     @State private var showActionBar = false
+    
+    @State private var alertMessage = ""
+    @State private var showAlert = false
+    
+    @State private var downloading = false
+    @State private var isAnimating = false
     
     init(wallpaper: Wallpaper) {
         self.wallpaper = wallpaper
@@ -22,7 +29,9 @@ struct WallpaperView: View {
             AsyncImage(url: imageUrl) { phase in
                 switch phase {
                     case .success(let image):
-                        image.resizable().aspectRatio(contentMode: .fit)
+                        image.resizable()
+                            .aspectRatio(16/9, contentMode: .fit)
+                            .cornerRadius(5)
                             .onAppear {
                                 withAnimation {
                                     showActionBar = true
@@ -39,46 +48,101 @@ struct WallpaperView: View {
                             
                             Text("Could not load wallpaper")
                         }
-                        .frame(width: 400, height: 400, alignment: .center)
                         .onAppear {
                             withAnimation {
-                                showActionBar = true
+                                showActionBar = false
                             }
                         }
+                        .frame(width: 200, height: 150)
                         
                     default:
                         ProgressView()
-                            .frame(width: 400, height: 400)
+                            .frame(width: 200, height: 150)
                 }
             }
+            //.frame(width: 200, height: 150)
+            
+            Spacer()
+            
             
             HStack {
-                if showActionBar {
-                    Button(
-                        action: {},
-                        label: {
-                            Image(systemName: "arrow.up.left.and.arrow.down.right")
-                        }
-                    )
-                    
-                    
-                    Button(
-                        action: {},
-                        label: {
-                            Image(systemName: "square.and.arrow.down")
-                        }
-                    )
-                    
-                    Button(
-                        action: {},
-                        label: {
-                            Image(systemName: "star.fill")
-                        }
-                    )
-                }
+                Button(
+                    action: {
+                        downloading = true
+                        downloadWallpaper()
+                    },
+                    label: {
+                        Image(systemName: "square.and.arrow.down")
+                    }
+                )
+                
+                Button(
+                    action: {
+                        
+                    },
+                    label: {
+                        Image(systemName: "arrow.up.left.and.arrow.down.right")
+                    }
+                )
+                
+                
+                Button(
+                    action: {},
+                    label: {
+                        Image(systemName: "star.fill")
+                    }
+                )
+                
             }
-            .padding(5)
-            .background(.ultraThinMaterial)
+            .frame(width: 200)
+            .opacity(showActionBar && !downloading ? 1 : 0)
+            
+            ProgressView("Downloading...")
+                .progressViewStyle(.linear)
+                .opacity(downloading ? 1 : 0)
         }
+        .alert(isPresented: $showAlert, content: {
+            Alert(
+                title: Text("Information"),
+                message: Text(alertMessage),
+                dismissButton: .default(Text("OK"))
+            )
+        }
+        )
+    }
+    
+    
+    func downloadWallpaper() {
+        let fileManager = FileManager.default
+        var wallExplorerUrl: URL? = nil
+        
+        if let downloadsUrl = fileManager.urls(for: .downloadsDirectory, in: .userDomainMask).first {
+            let tempWallExplorerUrl = downloadsUrl.appending(path: "Wallpaper Explorer Downloads", directoryHint: .isDirectory)
+            
+            if !fileManager.fileExists(atPath: tempWallExplorerUrl.path) {
+                do {
+                    try fileManager.createDirectory(at: tempWallExplorerUrl, withIntermediateDirectories: true)
+                    wallExplorerUrl = tempWallExplorerUrl
+                } catch {
+                    alertMessage = "Unable to access Downloads folder"
+                    return
+                }
+            } else {
+                wallExplorerUrl = tempWallExplorerUrl
+            }
+        }
+        
+        downloadFile(from: wallpaper.path, to: wallExplorerUrl!, completion: { result in
+            switch result {
+                case .success(_):
+                    alertMessage = "Download Complete"
+                case .failure(let failure):
+                    alertMessage = "Download Failed \(failure)"
+            }
+            
+            downloading = false
+            showAlert = true
+        }
+        )
     }
 }
