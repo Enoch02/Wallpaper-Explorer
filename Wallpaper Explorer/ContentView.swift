@@ -19,10 +19,14 @@ struct ContentView: View {
     @State private var selectedSorting = SortOptions.date_added
     @State private var selectedSortOrder = SortOrder.descending
     
+    @State private var defaultSearchResult: DefaultWallpaperSearch? = nil
+    @State private var apiSearchResult: WallpaperSearchWithKey? = nil
     @State private var wallpapers = [Wallpaper]()
     @State private var currentWallpaper: Wallpaper? = nil
     
     @State private var userSettings: WHSettings? = nil
+    @State private var showErrorAlert = false
+    @State private var errorMessage = ""
     
     var body: some View {
         NavigationSplitView(
@@ -110,10 +114,12 @@ struct ContentView: View {
             }
             
             ToolbarItem(placement: .automatic) {
-                Button("Refresh", systemImage: "arrow.clockwise",
-                       action: {
-                    loadContent()
-                }
+                Button(
+                    "Refresh",
+                    systemImage: "arrow.clockwise",
+                    action: {
+                        loadContent()
+                    }
                 )
             }
         }
@@ -123,9 +129,18 @@ struct ContentView: View {
                 loadContent()
             }
         )
+        .alert(
+            isPresented: $showErrorAlert,
+            content: {
+                Alert(
+                    title: Text("Error"),
+                    message: Text(errorMessage),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+        )
     }
     
-    //TODO: temporary?
     func loadContent() {
         if !wallpapers.isEmpty {
             wallpapers = [Wallpaper]()
@@ -133,11 +148,36 @@ struct ContentView: View {
         
         Task {
             do {
-                wallpapers = try await ApiService.shared.search()
+                switch try await ApiService.shared.search() {
+                    case .withoutKey(let defaultWallpaperSearch):
+                        wallpapers = defaultWallpaperSearch.data
+                        defaultSearchResult = defaultWallpaperSearch
+                        
+                    case .withKey(let wallpaperSearchWithKey):
+                        wallpapers = wallpaperSearchWithKey.data
+                        apiSearchResult = wallpaperSearchWithKey
+                        
+                    case .none:
+                        errorMessage = "Could not load wallpaper data!"
+                        showErrorAlert = true
+                }
             } catch let error as NSError {
+                errorMessage = error.localizedDescription
+                withAnimation {
+                    showErrorAlert = true
+                }
+                //TODO: remove
                 print(error.localizedDescription)
                 print(error.userInfo)
             }
+        }
+    }
+    
+    func clearExistingData() {
+        if !wallpapers.isEmpty {
+            wallpapers = [Wallpaper]()
+            defaultSearchResult = nil
+            apiSearchResult = nil
         }
     }
     
@@ -156,7 +196,10 @@ struct ContentView: View {
                     isPeopleSelected = userSettings.categories.contains("people")
                 }
             } catch let error as NSError {
-                print(error.localizedDescription)
+                errorMessage = error.localizedDescription
+                withAnimation {
+                    showErrorAlert = true
+                }
                 print(error.userInfo)
             }
         }

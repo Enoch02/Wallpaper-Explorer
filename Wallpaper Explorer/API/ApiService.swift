@@ -15,17 +15,51 @@ class ApiService {
     
     private init() {}
     
-    func search() async throws -> [Wallpaper] {
-        guard let url = URL(string: "\(BASE_URL)search") else { return [] }
-        let (data, _) = try await URLSession.shared.data(from: url)
-        let searchResult = try JSONDecoder().decode(WallpaperSearch.self, from: data)
+    func search() async throws -> SearchResult {
+        let urlString: String
+        let searchResult: SearchResult
         
-        return searchResult.data
+        if apiKey.isEmpty {
+            urlString = "\(BASE_URL)search"
+            print(urlString)
+            guard let url = URL(string: urlString) else { return .none }
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decodedResult = try JSONDecoder().decode(DefaultWallpaperSearch.self, from: data)
+            searchResult = .withoutKey(decodedResult)
+            
+        } else {
+            let parameters = ["apikey": apiKey]
+            guard let url = buildURL(baseURL: "\(BASE_URL)search", parameters: parameters) else { return .none }
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decodedResult = try JSONDecoder().decode(WallpaperSearchWithKey.self, from: data)
+            searchResult = .withKey(decodedResult)
+        }
+        
+        return searchResult
     }
     
-    func search(for keyword: String) async throws -> [Wallpaper] {
-        return [Wallpaper]()
-    }
+    //TODO: implement
+    /*func search(
+     for keyword: String,
+     categories: String,
+     purity: String,
+     sortOptions:SortOptions,
+     order: SortOrder) async throws -> SearchResult {
+     var urlString: String
+     
+     if !apiKey.isEmpty {
+     urlString = "\(BASE_URL)search"
+     } else {
+     urlString = "\(BASE_URL)search?apikey=\(apiKey)"
+     }
+     
+     let parameters = [
+     "apikey": api
+     ]
+     
+     guard let url = URL(string: urlString) else { return SearchResult.none }
+     let (data, _) = try await URLSession.shared.data(from: url)
+     }*/
     
     func getUserSettings() async throws -> WHSettings? {
         if !apiKey.isEmpty {
@@ -38,4 +72,18 @@ class ApiService {
         
         return nil
     }
+    
+    func buildURL(baseURL: String, parameters: [String: String]) -> URL? {
+        var components = URLComponents(string: baseURL)
+        components?.queryItems = parameters.map { key, value in
+            URLQueryItem(name: key, value: value)
+        }
+        return components?.url
+    }
+}
+
+enum SearchResult {
+    case withoutKey(DefaultWallpaperSearch)
+    case withKey(WallpaperSearchWithKey)
+    case none
 }
