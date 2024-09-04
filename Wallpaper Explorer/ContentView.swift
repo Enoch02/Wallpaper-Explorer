@@ -31,63 +31,59 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView(
             sidebar: {
-                Form {
-                    Picker("Sorting", selection: $selectedSorting) {
-                        ForEach(SortOptions.allCases, id: \.self) { option in
-                            Text(option.rawValue)
+                VStack {
+                    Form {
+                        Picker("Sorting", selection: $selectedSorting) {
+                            ForEach(SortOptions.allCases, id: \.self) { option in
+                                Text(option.rawValue)
+                            }
+                        }
+                        .frame(minWidth: 200, alignment: .leading)
+                        
+                        Spacer().frame(height: 20)
+                        
+                        Picker("Order", selection: $selectedSortOrder) {
+                            ForEach(SortOrder.allCases, id: \.self) { order in
+                                Text(order.rawValue)
+                            }
                         }
                     }
-                    .frame(minWidth: 200, alignment: .leading)
+                    .padding()
                     
-                    Spacer().frame(height: 20)
+                    Divider()
                     
-                    Picker("Order", selection: $selectedSortOrder) {
-                        ForEach(SortOrder.allCases, id: \.self) { order in
-                            Text(order.rawValue)
+                    VStack {
+                        if let currentWallpaper {
+                            Text("Properties").font(.headline)
+                            PropertyView(property: "Resolution", value: currentWallpaper.resolution)
+                            PropertyView(property: "Category", value: currentWallpaper.category)
+                            PropertyView(property: "Purity", value: currentWallpaper.purity)
+                            PropertyView(property: "Size", value: "\(String(format: "%.2f MiB", bytesToMiB(bytes: currentWallpaper.file_size))) - \(currentWallpaper.file_type)")
+                            PropertyView(property: "Views", value: "\(currentWallpaper.views)")
+                            PropertyView(property: "Favorites", value: "\(currentWallpaper.favorites)")
+                            PropertyLink(property: "Link", link: currentWallpaper.short_url)
                         }
                     }
+                    .padding()
                 }
-                .padding()
                 .frame(maxWidth: .infinity, maxHeight: .infinity,alignment: .top)
             },
             content: {
-                WallpaperList(
-                    wallpapers: $wallpapers,
-                    onSelectedWallpaperChange: { wallpaper in
-                        currentWallpaper = wallpaper
-                    }
-                )
-                .frame(minWidth: 250, alignment: .center)
+                if wallpapers.isEmpty {
+                    Text("There's nothing here...")
+                        .font(.headline)
+                } else {
+                    WallpaperList(
+                        wallpapers: $wallpapers,
+                        onSelectedWallpaperChange: { wallpaper in
+                            currentWallpaper = wallpaper
+                        }
+                    )
+                    .frame(minWidth: 250, alignment: .center)
+                }
             },
             detail: {
-                if let currentWallpaper = currentWallpaper {
-                    AsyncImage(url: currentWallpaper.path) { phase in
-                        switch phase {
-                            case .success(let image):
-                                image.resizable()
-                                    .resizable()
-                                    .scaledToFit()
-                                
-                            case .failure(_):
-                                VStack {
-                                    Image(systemName: "info.circle")
-                                        .symbolVariant(.circle)
-                                        .font(.largeTitle)
-                                    
-                                    Spacer(minLength: 5)
-                                    
-                                    Text("Could not load wallpaper")
-                                }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                
-                            default:
-                                ProgressView()
-                                    .frame(width: 200, height: 150, alignment: .center)
-                        }
-                    }
-                } else {
-                    Text("Please select an image").frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
+                ExpandedWallpaperView(wallpaper: currentWallpaper)
             }
         )
         .frame(minWidth: 1200, minHeight: 600)
@@ -144,6 +140,8 @@ struct ContentView: View {
     }
     
     func startSearch() {
+        clearExistingData()
+        
         Task {
             do {
                 let categories = "\(isGeneralSelected ? "1" : "0")\(isAnimeSelected ? "1" : "0")\(isPeopleSelected ? "1" : "0")"
@@ -169,6 +167,7 @@ struct ContentView: View {
     func clearExistingData() {
         if !wallpapers.isEmpty {
             wallpapers = [Wallpaper]()
+            currentWallpaper = nil
             defaultSearchResult = nil
             apiSearchResult = nil
         }
@@ -195,6 +194,34 @@ struct ContentView: View {
                 }
             }
         }
+    }
+    
+    private func PropertyView(property: String, value: String) -> some View {
+        HStack {
+            Text(property)
+                .font(.headline)
+                .foregroundColor(.gray)
+                .frame(width: 80, alignment: .leading)
+            
+            Text(value)
+                .font(.body)
+                .foregroundColor(.primary)
+            Spacer()
+        }
+        .padding(.vertical, 2)
+    }
+    
+    private func PropertyLink(property: String, link: URL) -> some View {
+        HStack {
+            Text(property)
+                .font(.headline)
+                .foregroundColor(.gray)
+                .frame(width: 80, alignment: .leading)
+            
+            Link(link.absoluteString, destination: link)
+            Spacer()
+        }
+        .padding(.vertical, 2)
     }
 }
 

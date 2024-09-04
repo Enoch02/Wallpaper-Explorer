@@ -60,11 +60,10 @@ struct WallpaperView: View {
                             .frame(width: 200, height: 150)
                 }
             }
-            //.frame(width: 200, height: 150)
             
             Spacer()
             
-            
+            //TODO: might move to the full image preview
             HStack {
                 Button(
                     action: {
@@ -96,6 +95,7 @@ struct WallpaperView: View {
             }
             .frame(width: 200)
             .opacity(showActionBar && !downloading ? 1 : 0)
+            .background(.thinMaterial)
             
             ProgressView("Downloading...")
                 .progressViewStyle(.linear)
