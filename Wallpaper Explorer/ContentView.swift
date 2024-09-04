@@ -17,7 +17,7 @@ struct ContentView: View {
     @State private var isPeopleSelected = false
     
     @State private var selectedSorting = SortOptions.date_added
-    @State private var selectedSortOrder = SortOrder.descending
+    @State private var selectedSortOrder = SortOrder.desc
     
     @State private var defaultSearchResult: DefaultWallpaperSearch? = nil
     @State private var apiSearchResult: WallpaperSearchWithKey? = nil
@@ -93,7 +93,7 @@ struct ContentView: View {
         .frame(minWidth: 1200, minHeight: 600)
         .searchable(text: $searchQuery, placement: .automatic)
         .onSubmit(of: .search) {
-            
+            startSearch()
         }
         .toolbar {
             ToolbarItem(placement: .automatic) {
@@ -118,7 +118,7 @@ struct ContentView: View {
                     "Refresh",
                     systemImage: "arrow.clockwise",
                     action: {
-                        loadContent()
+                        startSearch()
                     }
                 )
             }
@@ -126,7 +126,7 @@ struct ContentView: View {
         .onAppear(
             perform: {
                 getSettings()
-                loadContent()
+                startSearch()
             }
         )
         .alert(
@@ -139,16 +139,17 @@ struct ContentView: View {
                 )
             }
         )
+        .onChange(of: selectedSorting, { startSearch() })
+        .onChange(of: selectedSortOrder, { startSearch() })
     }
     
-    func loadContent() {
-        if !wallpapers.isEmpty {
-            wallpapers = [Wallpaper]()
-        }
-        
+    func startSearch() {
         Task {
             do {
-                switch try await ApiService.shared.search() {
+                let categories = "\(isGeneralSelected ? "1" : "0")\(isAnimeSelected ? "1" : "0")\(isPeopleSelected ? "1" : "0")"
+                let purity = "\(isSFWSelected ? "1" : "0")\(isSketchySelected ? "1" : "0")\(isNSFWSelected ? "1" : "0")"
+                
+                switch try await ApiService.shared.search(for: searchQuery, categories: categories, purity: purity, sortOption: selectedSorting, order: selectedSortOrder) {
                     case .withoutKey(let defaultWallpaperSearch):
                         wallpapers = defaultWallpaperSearch.data
                         defaultSearchResult = defaultWallpaperSearch
@@ -161,14 +162,6 @@ struct ContentView: View {
                         errorMessage = "Could not load wallpaper data!"
                         showErrorAlert = true
                 }
-            } catch let error as NSError {
-                errorMessage = error.localizedDescription
-                withAnimation {
-                    showErrorAlert = true
-                }
-                //TODO: remove
-                print(error.localizedDescription)
-                print(error.userInfo)
             }
         }
     }
@@ -200,7 +193,6 @@ struct ContentView: View {
                 withAnimation {
                     showErrorAlert = true
                 }
-                print(error.userInfo)
             }
         }
     }

@@ -15,20 +15,26 @@ class ApiService {
     
     private init() {}
     
-    func search() async throws -> SearchResult {
-        let urlString: String
+    //TODO: navigating between pages
+    func search(for keyword: String = "", categories: String, purity: String, sortOption: SortOptions, order: SortOrder) async throws -> SearchResult {
         let searchResult: SearchResult
+        var parameters = [
+            "apikey": apiKey,
+            "q": keyword,
+            "categories": categories,
+            "purity": purity,
+            "sorting": String(describing: sortOption),
+            "order": String(describing: order)
+        ]
         
         if apiKey.isEmpty {
-            urlString = "\(BASE_URL)search"
-            print(urlString)
-            guard let url = URL(string: urlString) else { return .none }
+            parameters.removeValue(forKey: "apikey")
+            guard let url = buildURL(baseURL: "\(BASE_URL)search", parameters: parameters) else { return .none }
             let (data, _) = try await URLSession.shared.data(from: url)
             let decodedResult = try JSONDecoder().decode(DefaultWallpaperSearch.self, from: data)
             searchResult = .withoutKey(decodedResult)
             
         } else {
-            let parameters = ["apikey": apiKey]
             guard let url = buildURL(baseURL: "\(BASE_URL)search", parameters: parameters) else { return .none }
             let (data, _) = try await URLSession.shared.data(from: url)
             let decodedResult = try JSONDecoder().decode(WallpaperSearchWithKey.self, from: data)
@@ -38,29 +44,7 @@ class ApiService {
         return searchResult
     }
     
-    //TODO: implement
-    /*func search(
-     for keyword: String,
-     categories: String,
-     purity: String,
-     sortOptions:SortOptions,
-     order: SortOrder) async throws -> SearchResult {
-     var urlString: String
-     
-     if !apiKey.isEmpty {
-     urlString = "\(BASE_URL)search"
-     } else {
-     urlString = "\(BASE_URL)search?apikey=\(apiKey)"
-     }
-     
-     let parameters = [
-     "apikey": api
-     ]
-     
-     guard let url = URL(string: urlString) else { return SearchResult.none }
-     let (data, _) = try await URLSession.shared.data(from: url)
-     }*/
-    
+    //TODO: reload user settings when api key has been changed
     func getUserSettings() async throws -> WHSettings? {
         if !apiKey.isEmpty {
             guard let url = URL(string: "\(BASE_URL)settings?apikey=\(apiKey)") else { return nil }
