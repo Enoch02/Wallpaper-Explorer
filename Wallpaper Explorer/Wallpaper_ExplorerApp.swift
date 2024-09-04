@@ -13,5 +13,7 @@ struct Wallpaper_ExplorerApp: App {
         WindowGroup {
             ContentView()
         }
+        
+        Settings(content: SettingsView.init)
     }
 }

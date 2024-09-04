@@ -22,6 +22,8 @@ struct ContentView: View {
     @State private var wallpapers = [Wallpaper]()
     @State private var currentWallpaper: Wallpaper? = nil
     
+    @State private var userSettings: WHSettings? = nil
+    
     var body: some View {
         NavigationSplitView(
             sidebar: {
@@ -51,7 +53,7 @@ struct ContentView: View {
                         currentWallpaper = wallpaper
                     }
                 )
-                    .frame(minWidth: 250, alignment: .center)
+                .frame(minWidth: 250, alignment: .center)
             },
             detail: {
                 if let currentWallpaper = currentWallpaper {
@@ -86,6 +88,9 @@ struct ContentView: View {
         )
         .frame(minWidth: 1200, minHeight: 600)
         .searchable(text: $searchQuery, placement: .automatic)
+        .onSubmit(of: .search) {
+            
+        }
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 ControlGroup("Category") {
@@ -101,7 +106,7 @@ struct ContentView: View {
                     Toggle("SFW", isOn: $isSFWSelected)
                     Toggle("Sketchy", isOn: $isSketchySelected)
                     Toggle("NSFW", isOn: $isNSFWSelected)
-                }.controlGroupStyle(.automatic)
+                }
             }
             
             ToolbarItem(placement: .automatic) {
@@ -112,10 +117,15 @@ struct ContentView: View {
                 )
             }
         }
-        .onAppear(perform: loadContent)
+        .onAppear(
+            perform: {
+                getSettings()
+                loadContent()
+            }
+        )
     }
     
-    //TODO: temporary
+    //TODO: temporary?
     func loadContent() {
         if !wallpapers.isEmpty {
             wallpapers = [Wallpaper]()
@@ -124,6 +134,27 @@ struct ContentView: View {
         Task {
             do {
                 wallpapers = try await ApiService.shared.search()
+            } catch let error as NSError {
+                print(error.localizedDescription)
+                print(error.userInfo)
+            }
+        }
+    }
+    
+    func getSettings() {
+        Task {
+            do {
+                userSettings = try await ApiService.shared.getUserSettings()
+                
+                if let userSettings {
+                    isSFWSelected = userSettings.purity.contains("sfw")
+                    isSketchySelected = userSettings.purity.contains("sketchy")
+                    isNSFWSelected = userSettings.purity.contains("nsfw")
+                    
+                    isGeneralSelected = userSettings.categories.contains("general")
+                    isAnimeSelected = userSettings.categories.contains("anime")
+                    isPeopleSelected = userSettings.categories.contains("people")
+                }
             } catch let error as NSError {
                 print(error.localizedDescription)
                 print(error.userInfo)

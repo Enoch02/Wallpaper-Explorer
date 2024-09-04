@@ -24,5 +24,6 @@ struct WallpaperList: View {
                 }
             }
         )
+        .listStyle(.sidebar)
     }
 }
