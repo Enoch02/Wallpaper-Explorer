@@ -17,7 +17,6 @@ struct WallpaperView: View {
     @State private var showAlert = false
     
     @State private var downloading = false
-    @State private var isAnimating = false
     
     init(wallpaper: Wallpaper) {
         self.wallpaper = wallpaper
@@ -40,11 +39,10 @@ struct WallpaperView: View {
                         
                     case .failure(_):
                         VStack {
-                            Image(systemName: "info.circle")
+                            Image(systemName: "exclamationmark.triangle")
                                 .symbolVariant(.circle)
-                                .font(.largeTitle)
-                            
-                            Spacer(minLength: 5)
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(.red)
                             
                             Text("Could not load wallpaper")
                         }
@@ -64,7 +62,7 @@ struct WallpaperView: View {
             Spacer()
             
             //TODO: might move to the full image preview
-            HStack {
+            /*HStack {
                 Button(
                     action: {
                         downloading = true
@@ -99,7 +97,7 @@ struct WallpaperView: View {
             
             ProgressView("Downloading...")
                 .progressViewStyle(.linear)
-                .opacity(downloading ? 1 : 0)
+                .opacity(downloading ? 1 : 0)*/
         }
         .alert(isPresented: $showAlert, content: {
             Alert(
@@ -112,7 +110,7 @@ struct WallpaperView: View {
     }
     
     
-    func downloadWallpaper() {
+    /*func downloadWallpaper() {
         let fileManager = FileManager.default
         var wallExplorerUrl: URL? = nil
         
@@ -145,4 +143,5 @@ struct WallpaperView: View {
         }
         )
     }
+     */
 }

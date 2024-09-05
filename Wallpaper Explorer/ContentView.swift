@@ -17,7 +17,7 @@ struct ContentView: View {
     @State private var isPeopleSelected = false
     
     @State private var selectedSorting = SortOptions.date_added
-    @State private var selectedSortOrder = SortOrder.desc
+    @State private var selectedSortOrder = SortOrder.desc                                                   
     
     @State private var defaultSearchResult: DefaultWallpaperSearch? = nil
     @State private var apiSearchResult: WallpaperSearchWithKey? = nil
@@ -84,6 +84,7 @@ struct ContentView: View {
             },
             detail: {
                 ExpandedWallpaperView(wallpaper: currentWallpaper)
+                    .padding()
             }
         )
         .frame(minWidth: 1200, minHeight: 600)

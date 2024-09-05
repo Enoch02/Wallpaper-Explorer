@@ -10,34 +10,165 @@ import SwiftUI
 struct ExpandedWallpaperView: View {
     let wallpaper: Wallpaper?
     
+    @State private var showActionBar = false
+    @State private var alertMessage = ""
+    @State private var showAlert = false
+    @State private var downloading = false
+    
+    @State private var retryCount = 0
+    @State private var showFailure = false
+    
     var body: some View {
         if let currentWallpaper = wallpaper {
-            AsyncImage(url: currentWallpaper.path) { phase in
-                switch phase {
-                    case .success(let image):
-                        image.resizable()
-                            .resizable()
-                            .scaledToFit()
-                        
-                    case .failure(_):
-                        VStack {
-                            Image(systemName: "info.circle")
-                                .symbolVariant(.circle)
-                                .font(.largeTitle)
+            VStack {
+                AsyncImage(url: currentWallpaper.path) { phase in
+                    switch phase {
+                        case .empty:
+                            ProgressView()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        case .success(let image):
+                            image.resizable()
+                                .resizable()
+                                .scaledToFit()
+                                .onAppear {
+                                    retryCount = 0
+                                    showFailure = false
+                                    
+                                    withAnimation {
+                                        showActionBar = true
+                                    }
+                                }
                             
-                            Spacer(minLength: 5)
-                            
-                            Text("Could not load wallpaper")
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        
-                    default:
-                        ProgressView()
-                            .frame(width: 200, height: 150, alignment: .center)
+                        case .failure(_):
+                            if showFailure {
+                                VStack {
+                                    Image(systemName: "exclamationmark.triangle")
+                                        .symbolVariant(.circle)
+                                        .frame(width: 50, height: 50)
+                                        .foregroundColor(.red)
+                                    
+                                    Text("Could not load wallpaper.")
+                                    
+                                    Button(
+                                        action: {
+                                            retryCount = 0
+                                            showFailure = false
+                                        },
+                                        label: {
+                                            Text("Retry")
+                                        }
+                                    ).padding()
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .onAppear {
+                                    withAnimation {
+                                        showActionBar = false
+                                    }
+                                }
+                            } else {
+                                ProgressView()
+                                    .onAppear {
+                                        retryImageLoad()
+                                        
+                                        withAnimation {
+                                            showActionBar = false
+                                        }
+                                    }
+                            }
+                        @unknown default:
+                            ProgressView()
+                    }
                 }
+                
+                HStack {
+                    Button(
+                        "Download",
+                        systemImage: "square.and.arrow.down",
+                        action: {
+                            downloading = true
+                            downloadWallpaper()
+                        }
+                    )
+                    
+                    Button(
+                        "Crop and Download",
+                        systemImage: "crop",
+                        action: {
+                            alertMessage = "Coming soon!"
+                            showAlert = true
+                        }
+                    )
+                    
+                }
+                .frame(maxWidth: .infinity)
+                .opacity(showActionBar && !downloading ? 1 : 0)
+                .background(.regularMaterial)
+                .padding()
+                .alert(isPresented: $showAlert, content: {
+                    Alert(
+                        title: Text("Information"),
+                        message: Text(alertMessage),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
+                )
+                
+                ProgressView("Downloading...")
+                    .progressViewStyle(.linear)
+                    .opacity(downloading ? 1 : 0)
+                    .padding()
             }
         } else {
             Text("Please select an image").frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+    
+    func retryImageLoad() {
+        // Increment retry count; show failure if retries are exhausted
+        retryCount += 1
+        if retryCount > 2 {
+            showFailure = true
+        } else {
+            // Trigger view update (forcing retry)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                showFailure = false
+            }
+        }
+    }
+    
+    func downloadWallpaper() {
+        let fileManager = FileManager.default
+        var wallExplorerUrl: URL? = nil
+        
+        if let downloadsUrl = fileManager.urls(for: .downloadsDirectory, in: .userDomainMask).first {
+            let tempWallExplorerUrl = downloadsUrl.appending(path: "Wallpaper Explorer Downloads", directoryHint: .isDirectory)
+            
+            if !fileManager.fileExists(atPath: tempWallExplorerUrl.path) {
+                do {
+                    try fileManager.createDirectory(at: tempWallExplorerUrl, withIntermediateDirectories: true)
+                    wallExplorerUrl = tempWallExplorerUrl
+                } catch {
+                    alertMessage = "Unable to access Downloads folder"
+                    return
+                }
+            } else {
+                wallExplorerUrl = tempWallExplorerUrl
+            }
+        }
+        
+        if let wallpaper {
+            downloadFile(from: wallpaper.path, to: wallExplorerUrl!, completion: { result in
+                switch result {
+                    case .success(_):
+                        alertMessage = "Download Complete"
+                    case .failure(let failure):
+                        alertMessage = "Download Failed \(failure)"
+                }
+                
+                downloading = false
+                showAlert = true
+            }
+            )
         }
     }
 }
