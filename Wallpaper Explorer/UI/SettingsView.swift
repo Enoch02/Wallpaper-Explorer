@@ -10,6 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     //TODO: replace with something more secure
     @AppStorage("apiKey") var apiKey = ""
+    @AppStorage("dataSaver") var dataSaver = false
     
     var body: some View {
         TabView {
@@ -22,6 +23,12 @@ struct SettingsView: View {
             }
             
             Form {
+                Toggle(
+                    isOn: $dataSaver,
+                    label: {
+                        Text("Data Saver")
+                    }
+                )
                 Text("Coming 🔜")
             }
             .tabItem {

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//TODO: where should i show the interface for changing the pages of the search result
 struct ContentView: View {
     @State private var searchQuery = ""
     @State private var isSFWSelected = false
@@ -17,7 +18,7 @@ struct ContentView: View {
     @State private var isPeopleSelected = false
     
     @State private var selectedSorting = SortOptions.date_added
-    @State private var selectedSortOrder = SortOrder.desc                                                   
+    @State private var selectedSortOrder = SortOrder.desc
     
     @State private var defaultSearchResult: DefaultWallpaperSearch? = nil
     @State private var apiSearchResult: WallpaperSearchWithKey? = nil
@@ -27,6 +28,8 @@ struct ContentView: View {
     @State private var userSettings: WHSettings? = nil
     @State private var showErrorAlert = false
     @State private var errorMessage = ""
+    
+    @State private var currentPage = 1
     
     var body: some View {
         NavigationSplitView(
@@ -46,6 +49,42 @@ struct ContentView: View {
                             ForEach(SortOrder.allCases, id: \.self) { order in
                                 Text(order.rawValue)
                             }
+                        }
+                    }
+                    .padding()
+                    
+                    Divider()
+                    
+                    VStack {
+                        Text("Pages").font(.headline)
+                        
+                        HStack {
+                            Button(
+                                action: {
+                                    if (currentPage > 1) {
+                                        currentPage -= 1
+                                        updateWallpaperList()
+                                    }
+                                },
+                                label: {
+                                    Image(systemName: "arrowshape.left")
+                                }
+                            )
+                            
+                            TextField("", value: $currentPage, formatter: NumberFormatter())
+                                .onSubmit {
+                                    updateWallpaperList()
+                                }
+                            
+                            Button(
+                                action: {
+                                    currentPage += 1
+                                    updateWallpaperList()
+                                },
+                                label: {
+                                    Image(systemName: "arrowshape.right")
+                                }
+                            )
                         }
                     }
                     .padding()
@@ -148,7 +187,7 @@ struct ContentView: View {
                 let categories = "\(isGeneralSelected ? "1" : "0")\(isAnimeSelected ? "1" : "0")\(isPeopleSelected ? "1" : "0")"
                 let purity = "\(isSFWSelected ? "1" : "0")\(isSketchySelected ? "1" : "0")\(isNSFWSelected ? "1" : "0")"
                 
-                switch try await ApiService.shared.search(for: searchQuery, categories: categories, purity: purity, sortOption: selectedSorting, order: selectedSortOrder) {
+                switch try await ApiService.shared.search(for: searchQuery, categories: categories, purity: purity, sortOption: selectedSorting, order: selectedSortOrder, page: currentPage) {
                     case .withoutKey(let defaultWallpaperSearch):
                         wallpapers = defaultWallpaperSearch.data
                         defaultSearchResult = defaultWallpaperSearch
@@ -194,6 +233,13 @@ struct ContentView: View {
                     showErrorAlert = true
                 }
             }
+        }
+    }
+    
+    func updateWallpaperList() {
+        if (currentPage > 0) {
+            currentWallpaper = nil
+            startSearch()
         }
     }
     

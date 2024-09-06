@@ -16,7 +16,7 @@ class ApiService {
     private init() {}
     
     //TODO: navigating between pages
-    func search(for keyword: String = "", categories: String, purity: String, sortOption: SortOptions, order: SortOrder) async throws -> SearchResult {
+    func search(for keyword: String = "", categories: String, purity: String, sortOption: SortOptions, order: SortOrder, page: Int) async throws -> SearchResult {
         let searchResult: SearchResult
         var parameters = [
             "apikey": apiKey,
@@ -24,7 +24,8 @@ class ApiService {
             "categories": categories,
             "purity": purity,
             "sorting": String(describing: sortOption),
-            "order": String(describing: order)
+            "order": String(describing: order),
+            "page": String(page)
         ]
         
         if apiKey.isEmpty {
@@ -36,6 +37,7 @@ class ApiService {
             
         } else {
             guard let url = buildURL(baseURL: "\(BASE_URL)search", parameters: parameters) else { return .none }
+            print(url.absoluteString)
             let (data, _) = try await URLSession.shared.data(from: url)
             let decodedResult = try JSONDecoder().decode(WallpaperSearchWithKey.self, from: data)
             searchResult = .withKey(decodedResult)

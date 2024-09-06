@@ -60,44 +60,6 @@ struct WallpaperView: View {
             }
             
             Spacer()
-            
-            //TODO: might move to the full image preview
-            /*HStack {
-                Button(
-                    action: {
-                        downloading = true
-                        downloadWallpaper()
-                    },
-                    label: {
-                        Image(systemName: "square.and.arrow.down")
-                    }
-                )
-                
-                Button(
-                    action: {
-                        
-                    },
-                    label: {
-                        Image(systemName: "arrow.up.left.and.arrow.down.right")
-                    }
-                )
-                
-                
-                Button(
-                    action: {},
-                    label: {
-                        Image(systemName: "star.fill")
-                    }
-                )
-                
-            }
-            .frame(width: 200)
-            .opacity(showActionBar && !downloading ? 1 : 0)
-            .background(.thinMaterial)
-            
-            ProgressView("Downloading...")
-                .progressViewStyle(.linear)
-                .opacity(downloading ? 1 : 0)*/
         }
         .alert(isPresented: $showAlert, content: {
             Alert(
@@ -108,40 +70,4 @@ struct WallpaperView: View {
         }
         )
     }
-    
-    
-    /*func downloadWallpaper() {
-        let fileManager = FileManager.default
-        var wallExplorerUrl: URL? = nil
-        
-        if let downloadsUrl = fileManager.urls(for: .downloadsDirectory, in: .userDomainMask).first {
-            let tempWallExplorerUrl = downloadsUrl.appending(path: "Wallpaper Explorer Downloads", directoryHint: .isDirectory)
-            
-            if !fileManager.fileExists(atPath: tempWallExplorerUrl.path) {
-                do {
-                    try fileManager.createDirectory(at: tempWallExplorerUrl, withIntermediateDirectories: true)
-                    wallExplorerUrl = tempWallExplorerUrl
-                } catch {
-                    alertMessage = "Unable to access Downloads folder"
-                    return
-                }
-            } else {
-                wallExplorerUrl = tempWallExplorerUrl
-            }
-        }
-        
-        downloadFile(from: wallpaper.path, to: wallExplorerUrl!, completion: { result in
-            switch result {
-                case .success(_):
-                    alertMessage = "Download Complete"
-                case .failure(let failure):
-                    alertMessage = "Download Failed \(failure)"
-            }
-            
-            downloading = false
-            showAlert = true
-        }
-        )
-    }
-     */
 }
