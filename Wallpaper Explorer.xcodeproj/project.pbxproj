@@ -27,6 +27,7 @@
 		79B0A7AC2C8882320099C76E /* BytesToMib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B0A7AB2C8882320099C76E /* BytesToMib.swift */; };
 		79B133462C83113D00B5186E /* DefaultWallpaperSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B133452C83113D00B5186E /* DefaultWallpaperSearch.swift */; };
 		79B133482C83177E00B5186E /* WallpaperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B133472C83177E00B5186E /* WallpaperView.swift */; };
+		79FE31C02C8B48D700AE5DAD /* ThumbQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FE31BF2C8B48D700AE5DAD /* ThumbQuality.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		79B0A7AB2C8882320099C76E /* BytesToMib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BytesToMib.swift; sourceTree = "<group>"; };
 		79B133452C83113D00B5186E /* DefaultWallpaperSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultWallpaperSearch.swift; sourceTree = "<group>"; };
 		79B133472C83177E00B5186E /* WallpaperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperView.swift; sourceTree = "<group>"; };
+		79FE31BF2C8B48D700AE5DAD /* ThumbQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbQuality.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 				791E70742C7A860A006A4DA2 /* ApiModels */,
 				791E70692C7A7E6D006A4DA2 /* SortOptions.swift */,
 				791E706B2C7A8173006A4DA2 /* SortOrder.swift */,
+				79FE31BF2C8B48D700AE5DAD /* ThumbQuality.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -344,6 +347,7 @@
 				791E70402C7A76B4006A4DA2 /* ContentView.swift in Sources */,
 				79B133462C83113D00B5186E /* DefaultWallpaperSearch.swift in Sources */,
 				79B0A7A02C8838500099C76E /* SettingsView.swift in Sources */,
+				79FE31C02C8B48D700AE5DAD /* ThumbQuality.swift in Sources */,
 				79B0A7A82C887BED0099C76E /* ExpandedWallpaperView.swift in Sources */,
 				79B0A7A42C885DF40099C76E /* WallpaperSearchWithKey.swift in Sources */,
 				791E706A2C7A7E6D006A4DA2 /* SortOptions.swift in Sources */,

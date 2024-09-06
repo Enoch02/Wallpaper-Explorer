@@ -18,10 +18,14 @@ struct ExpandedWallpaperView: View {
     @State private var retryCount = 0
     @State private var showFailure = false
     
+    @AppStorage("dataSaver") var dataSaver = false
+    
     var body: some View {
         if let currentWallpaper = wallpaper {
+            let url = dataSaver ? currentWallpaper.thumbs.large : currentWallpaper.path
+            
             VStack {
-                AsyncImage(url: currentWallpaper.path) { phase in
+                AsyncImage(url: url) { phase in
                     switch phase {
                         case .empty:
                             ProgressView()
@@ -81,14 +85,14 @@ struct ExpandedWallpaperView: View {
                 }
                 
                 HStack {
-                    Button(
-                        "Download",
-                        systemImage: "square.and.arrow.down",
-                        action: {
-                            downloading = true
-                            downloadWallpaper()
-                        }
-                    )
+                        Button(
+                            "Download",
+                            systemImage: "square.and.arrow.down",
+                            action: {
+                                downloading = true
+                                downloadWallpaper()
+                            }
+                        )
                     
                     Button(
                         "Crop and Download",
@@ -165,8 +169,10 @@ struct ExpandedWallpaperView: View {
                         alertMessage = "Download Failed \(failure)"
                 }
                 
-                downloading = false
-                showAlert = true
+                withAnimation {
+                    downloading = false
+                    showAlert = true
+                }
             }
             )
         }

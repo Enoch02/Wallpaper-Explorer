@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-//TODO: where should i show the interface for changing the pages of the search result
+//TODO: store favorite wallpapers locally
 struct ContentView: View {
     @State private var searchQuery = ""
     @State private var isSFWSelected = false

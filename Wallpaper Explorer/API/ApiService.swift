@@ -37,7 +37,6 @@ class ApiService {
             
         } else {
             guard let url = buildURL(baseURL: "\(BASE_URL)search", parameters: parameters) else { return .none }
-            print(url.absoluteString)
             let (data, _) = try await URLSession.shared.data(from: url)
             let decodedResult = try JSONDecoder().decode(WallpaperSearchWithKey.self, from: data)
             searchResult = .withKey(decodedResult)
