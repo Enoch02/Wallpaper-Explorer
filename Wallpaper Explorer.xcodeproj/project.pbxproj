@@ -17,6 +17,7 @@
 		791E706A2C7A7E6D006A4DA2 /* SortOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E70692C7A7E6D006A4DA2 /* SortOptions.swift */; };
 		791E706C2C7A8173006A4DA2 /* SortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E706B2C7A8173006A4DA2 /* SortOrder.swift */; };
 		791E70772C7A88F0006A4DA2 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E70762C7A88F0006A4DA2 /* ApiService.swift */; };
+		7990ABBF2C92C50700038252 /* TopRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990ABBE2C92C50700038252 /* TopRange.swift */; };
 		79A307382C87A8E30043EF6C /* WallpaperList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A307372C87A8E30043EF6C /* WallpaperList.swift */; };
 		79AE94EE2C85CD9D00CBD324 /* DownloadFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AE94ED2C85CD9D00CBD324 /* DownloadFile.swift */; };
 		79B0A7A02C8838500099C76E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B0A79F2C8838500099C76E /* SettingsView.swift */; };
@@ -62,6 +63,7 @@
 		791E70692C7A7E6D006A4DA2 /* SortOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOptions.swift; sourceTree = "<group>"; };
 		791E706B2C7A8173006A4DA2 /* SortOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOrder.swift; sourceTree = "<group>"; };
 		791E70762C7A88F0006A4DA2 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
+		7990ABBE2C92C50700038252 /* TopRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRange.swift; sourceTree = "<group>"; };
 		79A307372C87A8E30043EF6C /* WallpaperList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperList.swift; sourceTree = "<group>"; };
 		79AE94ED2C85CD9D00CBD324 /* DownloadFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadFile.swift; sourceTree = "<group>"; };
 		79B0A79F2C8838500099C76E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				791E70692C7A7E6D006A4DA2 /* SortOptions.swift */,
 				791E706B2C7A8173006A4DA2 /* SortOrder.swift */,
 				79FE31BF2C8B48D700AE5DAD /* ThumbQuality.swift */,
+				7990ABBE2C92C50700038252 /* TopRange.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 				79B0A7A82C887BED0099C76E /* ExpandedWallpaperView.swift in Sources */,
 				79B0A7A42C885DF40099C76E /* WallpaperSearchWithKey.swift in Sources */,
 				791E706A2C7A7E6D006A4DA2 /* SortOptions.swift in Sources */,
+				7990ABBF2C92C50700038252 /* TopRange.swift in Sources */,
 				79B0A7A62C885E460099C76E /* Wallpaper.swift in Sources */,
 				791E706C2C7A8173006A4DA2 /* SortOrder.swift in Sources */,
 				791E70772C7A88F0006A4DA2 /* ApiService.swift in Sources */,
@@ -520,7 +524,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Wallpaper Explorer/Preview Content\"";
 				DEVELOPMENT_TEAM = QY6DF63TZ4;
 				ENABLE_PREVIEWS = YES;
@@ -531,7 +535,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.2;
+				MARKETING_VERSION = 0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.enoch02.Wallpaper-Explorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -548,7 +552,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Wallpaper Explorer/Preview Content\"";
 				DEVELOPMENT_TEAM = QY6DF63TZ4;
 				ENABLE_PREVIEWS = YES;
@@ -559,7 +563,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.2;
+				MARKETING_VERSION = 0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.enoch02.Wallpaper-Explorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -15,8 +15,7 @@ class ApiService {
     
     private init() {}
     
-    //TODO: navigating between pages
-    func search(for keyword: String = "", categories: String, purity: String, sortOption: SortOptions, order: SortOrder, page: Int) async throws -> SearchResult {
+    func search(for keyword: String = "", categories: String, purity: String, sortOption: SortOptions, order: SortOrder, page: Int, topRange: TopRange) async throws -> SearchResult {
         let searchResult: SearchResult
         var parameters = [
             "apikey": apiKey,
@@ -25,7 +24,8 @@ class ApiService {
             "purity": purity,
             "sorting": String(describing: sortOption),
             "order": String(describing: order),
-            "page": String(page)
+            "page": String(page),
+            "topRange": topRange.rawValue
         ]
         
         if apiKey.isEmpty {

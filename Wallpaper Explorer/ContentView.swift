@@ -8,6 +8,8 @@
 import SwiftUI
 
 //TODO: store favorite wallpapers locally
+//TODO: play around with the image scaling when data saver is on
+//TODO: find the source of the `List with selection: SelectionManagerBox<String> tried to update multiple times per frame.` warning
 struct ContentView: View {
     @State private var searchQuery = ""
     @State private var isSFWSelected = false
@@ -19,6 +21,7 @@ struct ContentView: View {
     
     @State private var selectedSorting = SortOptions.date_added
     @State private var selectedSortOrder = SortOrder.desc
+    @State private var selectedTopRange = TopRange.one_month
     
     @State private var defaultSearchResult: DefaultWallpaperSearch? = nil
     @State private var apiSearchResult: WallpaperSearchWithKey? = nil
@@ -43,13 +46,22 @@ struct ContentView: View {
                         }
                         .frame(minWidth: 200, alignment: .leading)
                         
-                        Spacer().frame(height: 20)
+                        Spacer().frame(height: 10)
                         
                         Picker("Order", selection: $selectedSortOrder) {
                             ForEach(SortOrder.allCases, id: \.self) { order in
                                 Text(order.rawValue)
                             }
                         }
+                        
+                        Spacer().frame(height: 10)
+                        
+                        Picker("Top Range", selection: $selectedTopRange) {
+                            ForEach(TopRange.allCases, id: \.self) { range in
+                                Text(String(describing: range).replacingOccurrences(of: "_", with: " ").capitalized)
+                            }
+                        }
+                        .disabled(!(selectedSorting == SortOptions.toplist))
                     }
                     .padding()
                     
@@ -166,17 +178,38 @@ struct ContentView: View {
             }
         )
         .alert(
+            "Error",
             isPresented: $showErrorAlert,
-            content: {
-                Alert(
-                    title: Text("Error"),
-                    message: Text(errorMessage),
-                    dismissButton: .default(Text("OK"))
-                )
+            actions: {
+                Button("Retry") {
+                    startSearch()
+                    getSettings()
+                }
+                
+                Button("OK") {
+                    
+                }
+            },
+            message: { Text(errorMessage) }
+        )
+        .onChange(
+            of: selectedSorting, {
+                currentPage = 1
+                startSearch()
             }
         )
-        .onChange(of: selectedSorting, { startSearch() })
-        .onChange(of: selectedSortOrder, { startSearch() })
+        .onChange(
+            of: selectedSortOrder, {
+                currentPage = 1
+                startSearch()
+            }
+        )
+        .onChange(
+            of: selectedTopRange, {
+                currentPage = 1
+                startSearch()
+            }
+        )
     }
     
     func startSearch() {
@@ -187,7 +220,7 @@ struct ContentView: View {
                 let categories = "\(isGeneralSelected ? "1" : "0")\(isAnimeSelected ? "1" : "0")\(isPeopleSelected ? "1" : "0")"
                 let purity = "\(isSFWSelected ? "1" : "0")\(isSketchySelected ? "1" : "0")\(isNSFWSelected ? "1" : "0")"
                 
-                switch try await ApiService.shared.search(for: searchQuery, categories: categories, purity: purity, sortOption: selectedSorting, order: selectedSortOrder, page: currentPage) {
+                switch try await ApiService.shared.search(for: searchQuery, categories: categories, purity: purity, sortOption: selectedSorting, order: selectedSortOrder, page: currentPage, topRange: selectedTopRange) {
                     case .withoutKey(let defaultWallpaperSearch):
                         wallpapers = defaultWallpaperSearch.data
                         defaultSearchResult = defaultWallpaperSearch

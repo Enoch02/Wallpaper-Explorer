@@ -25,6 +25,7 @@ struct SettingsView: View {
             .tabItem {
                 Label("Key Management", systemImage: "globe")
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             
             VStack(alignment: .leading) {
                 Section(header: Text("Data Usage")) {
