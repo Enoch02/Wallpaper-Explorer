@@ -73,15 +73,13 @@ struct ContentView: View {
                         HStack {
                             Button(
                                 action: {
-                                    if (currentPage > 1) {
-                                        currentPage -= 1
-                                        updateWallpaperList()
-                                    }
+                                    previousPage()
                                 },
                                 label: {
                                     Image(systemName: "arrowshape.left")
                                 }
                             )
+                            .keyboardShortcut("[", modifiers: [.command])
                             
                             TextField("", value: $currentPage, formatter: NumberFormatter())
                                 .onSubmit {
@@ -90,13 +88,13 @@ struct ContentView: View {
                             
                             Button(
                                 action: {
-                                    currentPage += 1
-                                    updateWallpaperList()
+                                    nextPage()
                                 },
                                 label: {
                                     Image(systemName: "arrowshape.right")
                                 }
                             )
+                            .keyboardShortcut("]", modifiers: [.command])
                         }
                     }
                     .padding()
@@ -274,6 +272,18 @@ struct ContentView: View {
             currentWallpaper = nil
             startSearch()
         }
+    }
+    
+    func previousPage() {
+        if (currentPage > 1) {
+            currentPage -= 1
+            updateWallpaperList()
+        }
+    }
+    
+    func nextPage() {
+        currentPage += 1
+        updateWallpaperList()
     }
     
     private func PropertyView(property: String, value: String) -> some View {
