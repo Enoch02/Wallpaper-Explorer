@@ -32,7 +32,6 @@ struct ExpandedWallpaperView: View {
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                         case .success(let image):
                             image.resizable()
-                                .resizable()
                                 .scaledToFit()
                                 .onAppear {
                                     retryCount = 0
@@ -84,15 +83,21 @@ struct ExpandedWallpaperView: View {
                     }
                 }
                 
+                ProgressView("Downloading...")
+                    .progressViewStyle(.linear)
+                    .opacity(downloading ? 1 : 0)
+                    //.padding()
+                
                 HStack {
-                        Button(
-                            "Download",
-                            systemImage: "square.and.arrow.down",
-                            action: {
-                                downloading = true
-                                downloadWallpaper()
-                            }
-                        )
+                    Button(
+                        "Download",
+                        systemImage: "square.and.arrow.down",
+                        action: {
+                            downloading = true
+                            downloadWallpaper()
+                        }
+                    )
+                    .disabled(showActionBar && !downloading ? false : true)
                     
                     Button(
                         "Crop and Download",
@@ -102,25 +107,22 @@ struct ExpandedWallpaperView: View {
                             showAlert = true
                         }
                     )
+                    .disabled(showActionBar && !downloading ? false : true)
                     
                 }
                 .frame(maxWidth: .infinity)
-                .opacity(showActionBar && !downloading ? 1 : 0)
                 .background(.regularMaterial)
                 .padding()
-                .alert(isPresented: $showAlert, content: {
-                    Alert(
-                        title: Text("Information"),
-                        message: Text(alertMessage),
-                        dismissButton: .default(Text("OK"))
-                    )
-                }
+                .alert(
+                    isPresented: $showAlert,
+                    content: {
+                        Alert(
+                            title: Text("Information"),
+                            message: Text(alertMessage),
+                            dismissButton: .default(Text("OK"))
+                        )
+                    }
                 )
-                
-                ProgressView("Downloading...")
-                    .progressViewStyle(.linear)
-                    .opacity(downloading ? 1 : 0)
-                    .padding()
             }
         } else {
             Text("Please select an image").frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -12,6 +12,7 @@ import SwiftUI
 //TODO: find the source of the `List with selection: SelectionManagerBox<String> tried to update multiple times per frame.` warning
 struct ContentView: View {
     @State private var searchQuery = ""
+    @State private var previousSearchQuery = ""
     @State private var isSFWSelected = false
     @State private var isSketchySelected = false
     @State private var isNSFWSelected = false
@@ -182,10 +183,11 @@ struct ContentView: View {
                 Button("Retry") {
                     startSearch()
                     getSettings()
+                    showErrorAlert = false
                 }
                 
                 Button("OK") {
-                    
+                    showErrorAlert = false
                 }
             },
             message: { Text(errorMessage) }
@@ -236,6 +238,12 @@ struct ContentView: View {
     }
     
     func clearExistingData() {
+        errorMessage = ""
+        if previousSearchQuery != searchQuery {
+            currentPage = 1
+            previousSearchQuery = searchQuery
+        }
+
         if !wallpapers.isEmpty {
             wallpapers = [Wallpaper]()
             currentWallpaper = nil
