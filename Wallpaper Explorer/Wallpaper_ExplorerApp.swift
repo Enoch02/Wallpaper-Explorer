@@ -9,16 +9,9 @@ import SwiftUI
 
 @main
 struct Wallpaper_ExplorerApp: App {
-    let wallpaperManager = WallpaperManager()
-    
     var body: some Scene {
         WindowGroup {
-#if os(macOS)
             MacContentView()
-#else
-            IosContentView()
-                .environmentObject(wallpaperManager)
-#endif
         }
         
 #if os(macOS)

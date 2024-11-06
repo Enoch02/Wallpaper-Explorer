@@ -1,14 +1,15 @@
 //
-//  IosContentView.swift
-//  Wallpaper Explorer
+//  ContentView.swift
+//  Wallpaper Explorer Mobile
 //
-//  Created by Enoch Adesanya on 02/11/2024.
+//  Created by Enoch Adesanya on 06/11/2024.
 //
 
 import SwiftUI
 
-struct IosContentView: View {
+struct ContentView: View {
     @EnvironmentObject var wallpaperManager: WallpaperManager
+    
     var body: some View {
         ScrollView {
             LazyVStack {
@@ -21,6 +22,5 @@ struct IosContentView: View {
 }
 
 #Preview {
-    IosContentView()
-        .environmentObject(WallpaperManager())
+    ContentView()
 }
