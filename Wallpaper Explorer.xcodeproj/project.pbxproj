@@ -46,6 +46,7 @@
 		79ED15CA2CDBACCB00E5338F /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B0A7A12C8843170099C76E /* UserSettings.swift */; };
 		79ED15CB2CDBACCB00E5338F /* Wallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B0A7A52C885E460099C76E /* Wallpaper.swift */; };
 		79ED15CC2CDBACFD00E5338F /* WallpaperListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7916C7D42CD6387C006CE329 /* WallpaperListItem.swift */; };
+		79FA36C72CDF827F00352BFB /* WallpaperDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA36C62CDF827F00352BFB /* WallpaperDetailView.swift */; };
 		79FE31C02C8B48D700AE5DAD /* ThumbQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FE31BF2C8B48D700AE5DAD /* ThumbQuality.swift */; };
 /* End PBXBuildFile section */
 
@@ -100,6 +101,7 @@
 		79ED15B62CDBABE400E5338F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		79ED15B82CDBABE400E5338F /* Wallpaper_Explorer_Mobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Wallpaper_Explorer_Mobile.entitlements; sourceTree = "<group>"; };
 		79ED15BA2CDBABE400E5338F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		79FA36C62CDF827F00352BFB /* WallpaperDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperDetailView.swift; sourceTree = "<group>"; };
 		79FE31BF2C8B48D700AE5DAD /* ThumbQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbQuality.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -248,6 +250,7 @@
 				79ED15B62CDBABE400E5338F /* Assets.xcassets */,
 				79ED15B82CDBABE400E5338F /* Wallpaper_Explorer_Mobile.entitlements */,
 				79ED15B92CDBABE400E5338F /* Preview Content */,
+				79FA36C62CDF827F00352BFB /* WallpaperDetailView.swift */,
 			);
 			path = "Wallpaper Explorer Mobile";
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				79ED15CC2CDBACFD00E5338F /* WallpaperListItem.swift in Sources */,
 				79ED15C32CDBACBA00E5338F /* ApiService.swift in Sources */,
 				79ED15C02CDBACA800E5338F /* WallpaperManager.swift in Sources */,
+				79FA36C72CDF827F00352BFB /* WallpaperDetailView.swift in Sources */,
 				79ED15C42CDBACC200E5338F /* SortOptions.swift in Sources */,
 				79ED15C22CDBACB400E5338F /* DownloadFile.swift in Sources */,
 				79ED15C82CDBACCB00E5338F /* WallpaperSearchWithKey.swift in Sources */,

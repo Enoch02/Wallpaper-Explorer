@@ -27,8 +27,11 @@ final class WallpaperManager: ObservableObject {
     @Published var apiSearchResult: WallpaperSearchWithKey? = nil
     @Published var userSettings: WHSettings? = nil
     
+    @Published var searchQuery = ""
+    @Published var currentPage = 1
+    
     init() {
-        self.startSearch(forQuery: "", onPage: 1)
+        self.startSearch()
     }
     
     
@@ -54,15 +57,15 @@ final class WallpaperManager: ObservableObject {
         }
     }
     
-    func startSearch(forQuery: String, onPage: Int) {
+    func startSearch() {
         Task {
             do {
                 let categories = "\(self.isGeneralSelected ? "1" : "0")\(self.isAnimeSelected ? "1" : "0")\(self.isPeopleSelected ? "1" : "0")"
                 let purity = "\(isSFWSelected ? "1" : "0")\(isSketchySelected ? "1" : "0")\(isNSFWSelected ? "1" : "0")"
                 
                 
-                    switch try await ApiService.shared.search(for: forQuery, categories: categories, purity: purity, sortOption: selectedSorting,
-                                                              order: selectedSortOrder, page: onPage, topRange: selectedTopRange) {
+                    switch try await ApiService.shared.search(for: searchQuery, categories: categories, purity: purity, sortOption: selectedSorting,
+                                                              order: selectedSortOrder, page: currentPage, topRange: selectedTopRange) {
                         case .withoutKey(let defaultWallpaperSearch):
                             DispatchQueue.main.async {
                                 self.wallpapers = defaultWallpaperSearch.data
@@ -81,5 +84,17 @@ final class WallpaperManager: ObservableObject {
                 }
             }
         }
+    }
+    
+    func previousPage() {
+        if (currentPage > 1) {
+            currentPage -= 1
+            startSearch()
+        }
+    }
+    
+    func nextPage() {
+        currentPage += 1
+        startSearch()
     }
 }
