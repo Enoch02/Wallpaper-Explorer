@@ -18,14 +18,28 @@ struct ContentView: View {
                         .font(.headline)
                         .frame(maxHeight: .infinity)
                 } else {
-                    ScrollView {
-                        LazyVStack {
-                            ForEach(wallpaperManager.wallpapers, id: \.id) { wallpaper in
-                                NavigationLink(destination: WallpaperDetailView(wallpaper: wallpaper)) {
-                                    WallpaperListItem(wallpaperUrl: wallpaper.thumbs.original)
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            LazyVStack {
+                                // Invisible top anchor
+                                Color.clear
+                                    .frame(height: 1)
+                                    .id("top")
+                                
+                                ForEach(wallpaperManager.wallpapers, id: \.id) { wallpaper in
+                                    NavigationLink(destination: WallpaperDetailView(wallpaper: wallpaper)) {
+                                        WallpaperListItem(wallpaperUrl: wallpaper.thumbs.original)
+                                    }
                                 }
                             }
                         }
+                        .onChange(
+                            of: wallpaperManager.wallpapers.first?.id, {
+                                withAnimation {
+                                    proxy.scrollTo("top")
+                                }
+                            }
+                        )
                     }
                 }
                 
@@ -52,13 +66,32 @@ struct ContentView: View {
             .navigationTitle("Wallpaper Explorer")
             .toolbar {
                 ToolbarItem(
+                    placement: .topBarLeading,
+                    content: {
+                        //TODO: settings view
+                        NavigationLink(
+                            destination: EmptyView(),
+                            label: {
+                                Button(
+                                    "Settings",
+                                    systemImage: "gear",
+                                    action: {
+                                        
+                                    }
+                                )
+                            }
+                        )
+                    }
+                )
+                
+                ToolbarItem(
                     placement: .topBarTrailing,
                     content: {
                         Button(
                             "Refresh",
                             systemImage: "arrow.clockwise",
                             action: {
-                                wallpaperManager.startSearch()
+                                wallpaperManager.refresh()
                             }
                         )
                     }

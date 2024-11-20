@@ -97,4 +97,8 @@ final class WallpaperManager: ObservableObject {
         currentPage += 1
         startSearch()
     }
+    
+    func refresh() {
+       startSearch()
+    }
 }
