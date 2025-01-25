@@ -44,7 +44,7 @@ struct ContentView: View {
                 }
                 
                 HStack {
-                    Button(action: wallpaperManager.previousPage) {
+                    Button(action: { Task{ wallpaperManager.previousPage() } }) {
                         Image(systemName: "chevron.left")
                         Text("Prev")
                     }
@@ -56,7 +56,7 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    Button(action: wallpaperManager.nextPage) {
+                    Button( action: { Task { wallpaperManager.nextPage() } }) {
                         Text("Next")
                         Image(systemName: "chevron.right")
                     }
@@ -68,9 +68,8 @@ struct ContentView: View {
                 ToolbarItem(
                     placement: .topBarLeading,
                     content: {
-                        //TODO: settings view
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: SettingsView().environmentObject(wallpaperManager),
                             label: {
                                 Button(
                                     "Settings",

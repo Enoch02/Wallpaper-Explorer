@@ -293,34 +293,6 @@ struct MacContentView: View {
         currentPage += 1
         updateWallpaperList()
     }
-    
-    private func PropertyView(property: String, value: String) -> some View {
-        HStack {
-            Text(property)
-                .font(.headline)
-                .foregroundColor(.gray)
-                .frame(width: 80, alignment: .leading)
-            
-            Text(value)
-                .font(.body)
-                .foregroundColor(.primary)
-            Spacer()
-        }
-        .padding(.vertical, 2)
-    }
-    
-    private func PropertyLink(property: String, link: URL) -> some View {
-        HStack {
-            Text(property)
-                .font(.headline)
-                .foregroundColor(.gray)
-                .frame(width: 80, alignment: .leading)
-            
-            Link(link.absoluteString, destination: link)
-            Spacer()
-        }
-        .padding(.vertical, 2)
-    }
 }
 
 #Preview {

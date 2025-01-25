@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct Wallpaper_Explorer_MobileApp: App {
-    let wallpaperManager = WallpaperManager()
+    @StateObject var wallpaperManager = WallpaperManager()
     
     var body: some Scene {
         WindowGroup {

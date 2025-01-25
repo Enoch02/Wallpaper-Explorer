@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import Combine
 
 
+@MainActor
 final class WallpaperManager: ObservableObject {
     @Published
     var wallpapers = [Wallpaper]()
@@ -31,6 +33,7 @@ final class WallpaperManager: ObservableObject {
     @Published var currentPage = 1
     
     init() {
+        self.getSettings()
         self.startSearch()
     }
     
@@ -41,15 +44,13 @@ final class WallpaperManager: ObservableObject {
                 userSettings = try await ApiService.shared.getUserSettings()
                 
                 if let userSettings {
-                    DispatchQueue.main.async {
-                        self.isSFWSelected = userSettings.purity.contains("sfw")
-                        self.isSketchySelected = userSettings.purity.contains("sketchy")
-                        self.isNSFWSelected = userSettings.purity.contains("nsfw")
-                        
-                        self.isGeneralSelected = userSettings.categories.contains("general")
-                        self.isAnimeSelected = userSettings.categories.contains("anime")
-                        self.isPeopleSelected = userSettings.categories.contains("people")
-                    }
+                    self.isSFWSelected = userSettings.purity.contains("sfw")
+                    self.isSketchySelected = userSettings.purity.contains("sketchy")
+                    self.isNSFWSelected = userSettings.purity.contains("nsfw")
+                    
+                    self.isGeneralSelected = userSettings.categories.contains("general")
+                    self.isAnimeSelected = userSettings.categories.contains("anime")
+                    self.isPeopleSelected = userSettings.categories.contains("people")
                 }
             } catch _ as NSError {
                 //TODO
@@ -64,23 +65,19 @@ final class WallpaperManager: ObservableObject {
                 let purity = "\(isSFWSelected ? "1" : "0")\(isSketchySelected ? "1" : "0")\(isNSFWSelected ? "1" : "0")"
                 
                 
-                    switch try await ApiService.shared.search(for: searchQuery, categories: categories, purity: purity, sortOption: selectedSorting,
-                                                              order: selectedSortOrder, page: currentPage, topRange: selectedTopRange) {
-                        case .withoutKey(let defaultWallpaperSearch):
-                            DispatchQueue.main.async {
-                                self.wallpapers = defaultWallpaperSearch.data
-                                self.defaultSearchResult = defaultWallpaperSearch
-                            }
-                            
-                        case .withKey(let wallpaperSearchWithKey):
-                            DispatchQueue.main.async {
-                                self.wallpapers = wallpaperSearchWithKey.data
-                                self.apiSearchResult = wallpaperSearchWithKey
-                            }
-                            
-                        case .none:
-                            print("An error has occured, try again later")
-                            //TODO: handle errors
+                switch try await ApiService.shared.search(for: searchQuery, categories: categories, purity: purity, sortOption: selectedSorting,
+                                                          order: selectedSortOrder, page: currentPage, topRange: selectedTopRange) {
+                    case .withoutKey(let defaultWallpaperSearch):
+                        self.wallpapers = defaultWallpaperSearch.data
+                        self.defaultSearchResult = defaultWallpaperSearch
+                        
+                    case .withKey(let wallpaperSearchWithKey):
+                        self.wallpapers = wallpaperSearchWithKey.data
+                        self.apiSearchResult = wallpaperSearchWithKey
+                        
+                    case .none:
+                        print("An error has occured, try again later")
+                        //TODO: handle errors
                 }
             }
         }
@@ -99,6 +96,6 @@ final class WallpaperManager: ObservableObject {
     }
     
     func refresh() {
-       startSearch()
+        startSearch()
     }
 }
