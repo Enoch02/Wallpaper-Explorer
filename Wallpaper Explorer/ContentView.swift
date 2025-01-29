@@ -10,6 +10,7 @@ import SwiftUI
 //TODO: store favorite wallpapers locally
 //TODO: play around with the image scaling when data saver is on
 //TODO: find the source of the `List with selection: SelectionManagerBox<String> tried to update multiple times per frame.` warning
+//TODO: Migrate to WallpaperManager
 struct MacContentView: View {
     @State private var searchQuery = ""
     @State private var previousSearchQuery = ""
