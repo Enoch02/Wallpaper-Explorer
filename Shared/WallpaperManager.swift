@@ -31,6 +31,9 @@ final class WallpaperManager: ObservableObject {
     
     @Published var searchQuery = ""
     @Published var currentPage = 1
+	
+	@Published var showErrorAlert = false
+	@Published var errorMsg = ""
     
     init() {
         self.getSettings()
@@ -77,10 +80,13 @@ final class WallpaperManager: ObservableObject {
                         
                     case .none:
                         print("An error has occured, try again later")
-                        //TODO: handle errors
                 }
-            }
+			} catch let error as URLError {
+				showErrorAlert = true
+				errorMsg = "\(error.localizedDescription)"
+			}
         }
+		
     }
     
     func previousPage() {

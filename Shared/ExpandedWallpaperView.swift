@@ -22,7 +22,7 @@ struct ExpandedWallpaperView: View {
 	
 	var body: some View {
 		if let currentWallpaper = wallpaper {
-			let url = dataSaver ? currentWallpaper.thumbs.large : currentWallpaper.path
+			let url = dataSaver ? currentWallpaper.thumbs.original : currentWallpaper.path
 			
 			VStack {
 				AsyncImage(url: url) { phase in

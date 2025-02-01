@@ -68,6 +68,7 @@ struct ContentView: View {
 				.padding()
 			}
 			.navigationTitle("Wallpaper Explorer")
+#if os(iOS)
 			.toolbar {
 				ToolbarItem(
 					placement: .topBarLeading,
@@ -126,6 +127,7 @@ struct ContentView: View {
 					}
 				)
 			}
+#endif
 			.searchable(text: $wallpaperManager.searchQuery)
 			.searchPresentationToolbarBehavior(.avoidHidingContent)
 			.onSubmit(of: .search) {

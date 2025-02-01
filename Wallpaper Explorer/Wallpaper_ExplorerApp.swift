@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Wallpaper_ExplorerApp: App {
+	@StateObject var wallpaperManager = WallpaperManager()
+	
     var body: some Scene {
         WindowGroup {
             MacContentView()
+				.environmentObject(wallpaperManager)
         }
         
 #if os(macOS)

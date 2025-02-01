@@ -106,7 +106,7 @@
 		79EC269E2D44F90C00C0695D /* PropertyLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyLink.swift; sourceTree = "<group>"; };
 		79ED15B02CDBABE000E5338F /* Wallpaper Explorer Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wallpaper Explorer Mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		79ED15B22CDBABE000E5338F /* Wallpaper_Explorer_MobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallpaper_Explorer_MobileApp.swift; sourceTree = "<group>"; };
-		79ED15B42CDBABE100E5338F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		79ED15B42CDBABE100E5338F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; usesTabs = 1; };
 		79ED15B62CDBABE400E5338F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		79ED15B82CDBABE400E5338F /* Wallpaper_Explorer_Mobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Wallpaper_Explorer_Mobile.entitlements; sourceTree = "<group>"; };
 		79ED15BA2CDBABE400E5338F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
