@@ -5,8 +5,10 @@
 //  Created by Enoch Adesanya on 02/11/2024.
 //
 
-import Foundation
 import Combine
+import Foundation
+import SwiftUI
+
 
 
 @MainActor
@@ -21,9 +23,9 @@ final class WallpaperManager: ObservableObject {
     @Published var isAnimeSelected = false
     @Published var isPeopleSelected = false
     
-    @Published var selectedSorting = SortOptions.date_added
-    @Published var selectedSortOrder = SortOrder.desc
-    @Published var selectedTopRange = TopRange.one_month
+    @AppStorage("selected_sort_option") var selectedSorting = SortOptions.date_added
+    @AppStorage("sort_order") var selectedSortOrder = SortOrder.desc
+    @AppStorage("selected_top_range") var selectedTopRange = TopRange.one_month
     
     @Published var defaultSearchResult: DefaultWallpaperSearch? = nil
     @Published var apiSearchResult: WallpaperSearchWithKey? = nil
