@@ -7,40 +7,19 @@
 
 import SwiftUI
 
-//TODO: store favorite wallpapers locally
-//TODO: play around with the image scaling when data saver is on
-//TODO: find the source of the `List with selection: SelectionManagerBox<String> tried to update multiple times per frame.` warning
-struct ContentView: View {
-    @State private var searchQuery = ""
-    @State private var previousSearchQuery = ""
-    @State private var isSFWSelected = false
-    @State private var isSketchySelected = false
-    @State private var isNSFWSelected = false
-    @State private var isGeneralSelected = false
-    @State private var isAnimeSelected = false
-    @State private var isPeopleSelected = false
-    
-    @State private var selectedSorting = SortOptions.date_added
-    @State private var selectedSortOrder = SortOrder.desc
-    @State private var selectedTopRange = TopRange.one_month
-    
-    @State private var defaultSearchResult: DefaultWallpaperSearch? = nil
-    @State private var apiSearchResult: WallpaperSearchWithKey? = nil
-    @State private var wallpapers = [Wallpaper]()
-    @State private var currentWallpaper: Wallpaper? = nil
-    
-    @State private var userSettings: WHSettings? = nil
-    @State private var showErrorAlert = false
-    @State private var errorMessage = ""
-    
-    @State private var currentPage = 1
+//TODO: Write tests
+struct MacContentView: View {
+	@EnvironmentObject var wallpaperManager: WallpaperManager
+
+	@State private var currentWallpaper: Wallpaper? = nil	
+	@AppStorage("checkSettings") var checkSettings = true
     
     var body: some View {
         NavigationSplitView(
             sidebar: {
                 VStack {
                     Form {
-                        Picker("Sorting", selection: $selectedSorting) {
+						Picker("Sorting", selection: $wallpaperManager.selectedSorting) {
                             ForEach(SortOptions.allCases, id: \.self) { option in
                                 Text(option.rawValue)
                             }
@@ -49,7 +28,7 @@ struct ContentView: View {
                         
                         Spacer().frame(height: 10)
                         
-                        Picker("Order", selection: $selectedSortOrder) {
+						Picker("Order", selection: $wallpaperManager.selectedSortOrder) {
                             ForEach(SortOrder.allCases, id: \.self) { order in
                                 Text(order.rawValue)
                             }
@@ -57,12 +36,12 @@ struct ContentView: View {
                         
                         Spacer().frame(height: 10)
                         
-                        Picker("Top Range", selection: $selectedTopRange) {
+						Picker("Top Range", selection: $wallpaperManager.selectedTopRange) {
                             ForEach(TopRange.allCases, id: \.self) { range in
                                 Text(String(describing: range).replacingOccurrences(of: "_", with: " ").capitalized)
                             }
                         }
-                        .disabled(!(selectedSorting == SortOptions.toplist))
+						.disabled(!(wallpaperManager.selectedSorting == SortOptions.toplist))
                     }
                     .padding()
                     
@@ -82,7 +61,7 @@ struct ContentView: View {
                             )
                             .keyboardShortcut("[", modifiers: [.command])
                             
-                            TextField("", value: $currentPage, formatter: NumberFormatter())
+							TextField("", value: $wallpaperManager.currentPage, formatter: NumberFormatter())
                                 .onSubmit {
                                     updateWallpaperList()
                                 }
@@ -119,12 +98,12 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity,alignment: .top)
             },
             content: {
-                if wallpapers.isEmpty {
+				if wallpaperManager.wallpapers.isEmpty {
                     Text("There's nothing here...")
                         .font(.headline)
                 } else {
                     WallpaperList(
-                        wallpapers: $wallpapers,
+						wallpapers: $wallpaperManager.wallpapers,
                         onSelectedWallpaperChange: { wallpaper in
                             currentWallpaper = wallpaper
                         }
@@ -138,25 +117,25 @@ struct ContentView: View {
             }
         )
         .frame(minWidth: 1200, minHeight: 600)
-        .searchable(text: $searchQuery, placement: .automatic)
+		.searchable(text: $wallpaperManager.searchQuery, placement: .automatic)
         .onSubmit(of: .search) {
-            startSearch()
+			wallpaperManager.startSearch()
         }
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 ControlGroup("Category") {
-                    Toggle("General", isOn: $isGeneralSelected)
-                    Toggle("Anime", isOn: $isAnimeSelected)
-                    Toggle("People", isOn: $isPeopleSelected)
+					Toggle("General", isOn: $wallpaperManager.isGeneralSelected)
+					Toggle("Anime", isOn: $wallpaperManager.isAnimeSelected)
+					Toggle("People", isOn: $wallpaperManager.isPeopleSelected)
                 }
             }
             
             
             ToolbarItem(placement: .automatic) {
                 ControlGroup("Purity") {
-                    Toggle("SFW", isOn: $isSFWSelected)
-                    Toggle("Sketchy", isOn: $isSketchySelected)
-                    Toggle("NSFW", isOn: $isNSFWSelected)
+					Toggle("SFW", isOn: $wallpaperManager.isSFWSelected)
+					Toggle("Sketchy", isOn: $wallpaperManager.isSketchySelected)
+					Toggle("NSFW", isOn: $wallpaperManager.isNSFWSelected)
                 }
             }
             
@@ -165,164 +144,75 @@ struct ContentView: View {
                     "Refresh",
                     systemImage: "arrow.clockwise",
                     action: {
-                        startSearch()
+						wallpaperManager.startSearch()
                     }
                 )
             }
         }
         .onAppear(
             perform: {
-                getSettings()
-                startSearch()
+				if checkSettings {
+					wallpaperManager.getSettings()
+				}
+				wallpaperManager.startSearch()
             }
         )
         .alert(
             "Error",
-            isPresented: $showErrorAlert,
+			isPresented: $wallpaperManager.showErrorAlert,
             actions: {
                 Button("Retry") {
-                    startSearch()
-                    getSettings()
-                    showErrorAlert = false
+					wallpaperManager.startSearch()
+					wallpaperManager.getSettings()
+					wallpaperManager.showErrorAlert = false
                 }
                 
                 Button("OK") {
-                    showErrorAlert = false
+					wallpaperManager.showErrorAlert = false
                 }
             },
-            message: { Text(errorMessage) }
+			message: { Text(wallpaperManager.errorMsg) }
         )
         .onChange(
-            of: selectedSorting, {
-                currentPage = 1
-                startSearch()
-            }
-        )
-        .onChange(
-            of: selectedSortOrder, {
-                currentPage = 1
-                startSearch()
+			of: wallpaperManager.selectedSorting, {
+				wallpaperManager.currentPage = 1
+				wallpaperManager.startSearch()
             }
         )
         .onChange(
-            of: selectedTopRange, {
-                currentPage = 1
-                startSearch()
+			of: wallpaperManager.selectedSortOrder, {
+				wallpaperManager.currentPage = 1
+				wallpaperManager.startSearch()
             }
         )
-    }
-    
-    func startSearch() {
-        clearExistingData()
-        
-        Task {
-            do {
-                let categories = "\(isGeneralSelected ? "1" : "0")\(isAnimeSelected ? "1" : "0")\(isPeopleSelected ? "1" : "0")"
-                let purity = "\(isSFWSelected ? "1" : "0")\(isSketchySelected ? "1" : "0")\(isNSFWSelected ? "1" : "0")"
-                
-                switch try await ApiService.shared.search(for: searchQuery, categories: categories, purity: purity, sortOption: selectedSorting, order: selectedSortOrder, page: currentPage, topRange: selectedTopRange) {
-                    case .withoutKey(let defaultWallpaperSearch):
-                        wallpapers = defaultWallpaperSearch.data
-                        defaultSearchResult = defaultWallpaperSearch
-                        
-                    case .withKey(let wallpaperSearchWithKey):
-                        wallpapers = wallpaperSearchWithKey.data
-                        apiSearchResult = wallpaperSearchWithKey
-                        
-                    case .none:
-                        errorMessage = "Could not load wallpaper data!"
-                        showErrorAlert = true
-                }
+        .onChange(
+			of: wallpaperManager.selectedTopRange, {
+				wallpaperManager.currentPage = 1
+				wallpaperManager.startSearch()
             }
-        }
-    }
-    
-    func clearExistingData() {
-        errorMessage = ""
-        if previousSearchQuery != searchQuery {
-            currentPage = 1
-            previousSearchQuery = searchQuery
-        }
-
-        if !wallpapers.isEmpty {
-            wallpapers = [Wallpaper]()
-            currentWallpaper = nil
-            defaultSearchResult = nil
-            apiSearchResult = nil
-        }
-    }
-    
-    func getSettings() {
-        Task {
-            do {
-                userSettings = try await ApiService.shared.getUserSettings()
-                
-                if let userSettings {
-                    isSFWSelected = userSettings.purity.contains("sfw")
-                    isSketchySelected = userSettings.purity.contains("sketchy")
-                    isNSFWSelected = userSettings.purity.contains("nsfw")
-                    
-                    isGeneralSelected = userSettings.categories.contains("general")
-                    isAnimeSelected = userSettings.categories.contains("anime")
-                    isPeopleSelected = userSettings.categories.contains("people")
-                }
-            } catch let error as NSError {
-                errorMessage = error.localizedDescription
-                withAnimation {
-                    showErrorAlert = true
-                }
-            }
-        }
+        )
     }
     
     func updateWallpaperList() {
-        if (currentPage > 0) {
+		if (wallpaperManager.currentPage > 0) {
             currentWallpaper = nil
-            startSearch()
+			wallpaperManager.startSearch()
         }
     }
     
     func previousPage() {
-        if (currentPage > 1) {
-            currentPage -= 1
+		if (wallpaperManager.currentPage > 1) {
+			wallpaperManager.currentPage -= 1
             updateWallpaperList()
         }
     }
     
     func nextPage() {
-        currentPage += 1
+		wallpaperManager.currentPage += 1
         updateWallpaperList()
-    }
-    
-    private func PropertyView(property: String, value: String) -> some View {
-        HStack {
-            Text(property)
-                .font(.headline)
-                .foregroundColor(.gray)
-                .frame(width: 80, alignment: .leading)
-            
-            Text(value)
-                .font(.body)
-                .foregroundColor(.primary)
-            Spacer()
-        }
-        .padding(.vertical, 2)
-    }
-    
-    private func PropertyLink(property: String, link: URL) -> some View {
-        HStack {
-            Text(property)
-                .font(.headline)
-                .foregroundColor(.gray)
-                .frame(width: 80, alignment: .leading)
-            
-            Link(link.absoluteString, destination: link)
-            Spacer()
-        }
-        .padding(.vertical, 2)
     }
 }
 
 #Preview {
-    ContentView()
+    MacContentView()
 }
