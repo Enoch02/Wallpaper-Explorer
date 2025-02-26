@@ -27,6 +27,7 @@ A SwiftUI application for browsing and downloading wallpapers from [Wallhaven](h
 ## Screenshots
 
 ![Main Window](screenshots/one.png)
+![Search](screenshots/two.png)
 
 ## Requirements
 
