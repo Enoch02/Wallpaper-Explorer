@@ -18,6 +18,7 @@
 		791E706A2C7A7E6D006A4DA2 /* SortOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E70692C7A7E6D006A4DA2 /* SortOptions.swift */; };
 		791E706C2C7A8173006A4DA2 /* SortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E706B2C7A8173006A4DA2 /* SortOrder.swift */; };
 		791E70772C7A88F0006A4DA2 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E70762C7A88F0006A4DA2 /* ApiService.swift */; };
+		7932F80E2D732AA100C9508D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7932F80D2D732AA100C9508D /* Kingfisher */; };
 		7950A1542CF1B623008C07E1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7950A1532CF1B623008C07E1 /* SettingsView.swift */; };
 		7990ABBF2C92C50700038252 /* TopRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990ABBE2C92C50700038252 /* TopRange.swift */; };
 		79A307382C87A8E30043EF6C /* WallpaperList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A307372C87A8E30043EF6C /* WallpaperList.swift */; };
@@ -119,6 +120,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7932F80E2D732AA100C9508D /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +304,9 @@
 			dependencies = (
 			);
 			name = "Wallpaper Explorer";
+			packageProductDependencies = (
+				7932F80D2D732AA100C9508D /* Kingfisher */,
+			);
 			productName = "Wallpaper Explorer";
 			productReference = 791E703A2C7A76B4006A4DA2 /* Wallpaper Explorer.app */;
 			productType = "com.apple.product-type.application";
@@ -394,6 +399,9 @@
 				Base,
 			);
 			mainGroup = 791E70312C7A76B3006A4DA2;
+			packageReferences = (
+				7932F80C2D732AA100C9508D /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			productRefGroup = 791E703B2C7A76B4006A4DA2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -656,7 +664,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Wallpaper Explorer/Preview Content\"";
 				DEVELOPMENT_TEAM = QY6DF63TZ4;
 				ENABLE_PREVIEWS = YES;
@@ -667,7 +675,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.3;
+				MARKETING_VERSION = 0.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.enoch02.Wallpaper-Explorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -687,7 +695,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Wallpaper Explorer/Preview Content\"";
 				DEVELOPMENT_TEAM = QY6DF63TZ4;
 				ENABLE_PREVIEWS = YES;
@@ -698,7 +706,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.3;
+				MARKETING_VERSION = 0.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.enoch02.Wallpaper-Explorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -902,6 +910,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7932F80C2D732AA100C9508D /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7932F80D2D732AA100C9508D /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7932F80C2D732AA100C9508D /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 791E70322C7A76B3006A4DA2 /* Project object */;
 }

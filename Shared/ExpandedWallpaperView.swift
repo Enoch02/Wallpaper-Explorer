@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct ExpandedWallpaperView: View {
 	let wallpaper: Wallpaper?
@@ -25,63 +26,45 @@ struct ExpandedWallpaperView: View {
 			let url = dataSaver ? currentWallpaper.thumbs.original : currentWallpaper.path
 			
 			VStack {
-				AsyncImage(url: url) { phase in
-					switch phase {
-						case .empty:
-							ProgressView()
-								.frame(maxWidth: .infinity, maxHeight: .infinity)
-						case .success(let image):
-							image.resizable()
-								.scaledToFit()
-								.onAppear {
-									retryCount = 0
-									showFailure = false
-									
-									withAnimation {
-										showActionBar = true
-									}
-								}
-							
-						case .failure(_):
-							if showFailure {
-								VStack {
-									Image(systemName: "exclamationmark.triangle")
-										.symbolVariant(.circle)
-										.frame(width: 50, height: 50)
-										.foregroundColor(.red)
-									
-									Text("Could not load wallpaper.")
-									
-									Button(
-										action: {
-											retryCount = 0
-											showFailure = false
-										},
-										label: {
-											Text("Retry")
-										}
-									).padding()
-								}
-								.frame(maxWidth: .infinity, maxHeight: .infinity)
-								.onAppear {
-									withAnimation {
-										showActionBar = false
-									}
-								}
-							} else {
-								ProgressView()
-									.onAppear {
-										retryImageLoad()
-										
-										withAnimation {
-											showActionBar = false
-										}
-									}
-							}
-						@unknown default:
-							ProgressView()
+				KFImage(url)
+					.resizable()
+					.onFailure { error in
+						showFailure = true
+						
+						withAnimation {
+							showActionBar = false
+						}
 					}
-				}
+					.onSuccess { _ in
+						showFailure = false
+						
+						withAnimation {
+							showActionBar = true
+						}
+					}
+					.scaledToFit()
+					.onAppear {
+						retryCount = 0
+						showFailure = false
+						
+						withAnimation {
+							showActionBar = true
+						}
+					}
+					.id(retryCount) // Force reload when retryCount changes
+					.overlay {
+						if showFailure {
+							VStack {
+								Text("Failed to load image")
+									.foregroundColor(.red)
+									.padding()
+								
+								Button("Retry") {
+									retryCount += 1
+								}
+							}
+						}
+					}
 				
 				ProgressView("Downloading...")
 					.progressViewStyle(.linear)
