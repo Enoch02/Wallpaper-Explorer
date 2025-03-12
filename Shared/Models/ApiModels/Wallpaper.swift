@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Wallpaper: Decodable {
+struct Wallpaper: Decodable, Equatable {
     var id: String
     var url: URL
     var short_url: URL
@@ -26,6 +26,10 @@ struct Wallpaper: Decodable {
     var colors: [String]
     var path: URL
     var thumbs: Thumbs
+	
+	static func == (lhs: Wallpaper, rhs: Wallpaper) -> Bool {
+		return lhs.id == rhs.id && lhs.url == rhs.url
+	}
 }
 
 struct Thumbs: Decodable {
