@@ -119,6 +119,7 @@ struct MacContentView: View {
         .frame(minWidth: 1200, minHeight: 600)
 		.searchable(text: $wallpaperManager.searchQuery, placement: .automatic)
         .onSubmit(of: .search) {
+			wallpaperManager.currentPage = 1
 			wallpaperManager.startSearch()
         }
         .toolbar {
@@ -215,4 +216,5 @@ struct MacContentView: View {
 
 #Preview {
     MacContentView()
+		.environmentObject(WallpaperManager())
 }
